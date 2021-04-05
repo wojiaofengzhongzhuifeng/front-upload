@@ -28,6 +28,7 @@ function App() {
         }
       })
       if(currentUploadFileObj){
+        // todo 根据后端返回的数据, 修改
         currentUploadFileObj.url = currentUploadFileObj.response.path
       }
     }
