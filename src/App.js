@@ -1,25 +1,21 @@
 import './App.css';
-import { Upload, Button, message } from 'antd';
+import { Upload, Button, message,Modal, Input } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import {useState, useEffect} from 'react'
+import {UPLOAD_URL, getAllFolderNameList, useDebounce, createNewFolder} from './utils/index';
 
-let UPLOAD_URL;
-if(process.env.REACT_APP_ENV === 'dev'){
-  UPLOAD_URL = 'http://localhost:3003'
-} else {
-  UPLOAD_URL = 'http://canyou.rickricks.com:7777'
-}
 
 
 function App() {
   const [fileList, setFileList] = useState()
-
-  // const [defaultFileList, setDefaultFileList] = useState([])
+  const [modalVisible, setModalVisible] = useState(false);
+  const [folderInputValue, handleFolderInputValue] = useState('');
+  const [folderNameIsDuplication, setFolderNameIsDuplication] = useState(false);// 通过接口判断文件夹名称是否重复
+  const debouncedFolderInputValue = useDebounce(folderInputValue, 500);
 
   useEffect(()=>{
-    let cacheUploadFileList = JSON.parse(localStorage.getItem('uploadFileList'))
-    setFileList(cacheUploadFileList)
-    console.log(typeof cacheUploadFileList);
+    initFolderName()
+    initFileList()
   }, [])
 
   const handleFileUpload = (info)=>{
@@ -44,7 +40,36 @@ function App() {
     setFileList([...info.fileList])
     localStorage.setItem('uploadFileList', JSON.stringify(info.fileList))
   }
+  const initFileList = ()=>{
+    let cacheUploadFileList = JSON.parse(localStorage.getItem('uploadFileList'))
+    setFileList(cacheUploadFileList)
+  }
 
+  // 用户自定义在后端 upload 目录的名称
+  const initFolderName = ()=>{
+    let folderName = localStorage.getItem('folderName');
+    if(!folderName){
+      setModalVisible(true);
+    }
+  }
+  useEffect(()=>{
+    getAllFolderNameList().then(folderNameList => {
+      if(folderNameList.includes(debouncedFolderInputValue)){
+        setFolderNameIsDuplication(true);
+      } else {
+        setFolderNameIsDuplication(false);
+      }
+    })
+  }, [debouncedFolderInputValue]);
+
+  const handleClickOk = ()=>{
+    createNewFolder(debouncedFolderInputValue).then((response)=>{
+      if(response.code === 200){
+        setModalVisible(false);
+        localStorage.setItem('folderName', 'true');
+      }
+    })
+  }
 
   return (
     <div className="App">
@@ -55,6 +80,19 @@ function App() {
       >
         <Button icon={<UploadOutlined />}>上传 HTML 或者图片</Button>
       </Upload>
+      <Modal
+        title="请输入您的专属文件夹名称"
+        visible={modalVisible}
+        closeIcon={null}
+        footer={
+          <Button type='primary' onClick={handleClickOk}>确定</Button>
+        }
+      >
+        <Input value={folderInputValue} onChange={(e)=>{handleFolderInputValue(e.target.value)}}/>
+        {
+          folderNameIsDuplication ? <p style={{color:"red"}}>该文件夹名称重复,请重新输入</p> : null
+        }
+      </Modal>
     </div>
   );
 }
