@@ -3,8 +3,12 @@ import { Upload, Button, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import {useState, useEffect} from 'react'
 
-const UPLOAD_URL = 'http://localhost:3003/upload'
-
+let UPLOAD_URL;
+if(process.env.REACT_APP_ENV === 'dev'){
+  UPLOAD_URL = 'http://localhost:3003'
+} else {
+  UPLOAD_URL = 'http://canyou.rickricks.com:7777'
+}
 
 
 function App() {
@@ -46,7 +50,7 @@ function App() {
     <div className="App">
       <Upload
         onChange={handleFileUpload}
-        action={UPLOAD_URL}
+        action={`${UPLOAD_URL}/upload`}
         fileList={fileList}
       >
         <Button icon={<UploadOutlined />}>上传 HTML 或者图片</Button>
