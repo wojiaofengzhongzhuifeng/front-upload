@@ -53,7 +53,8 @@ function App() {
     }
   }
   useEffect(()=>{
-    getAllFolderNameList().then(folderNameList => {
+    getAllFolderNameList().then(response => {
+      const {data: folderNameList} = response;
       if(folderNameList.includes(debouncedFolderInputValue)){
         setFolderNameIsDuplication(true);
       } else {

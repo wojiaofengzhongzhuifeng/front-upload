@@ -19,7 +19,7 @@ const instance = axios.create({
 async function getAllFolderNameList(){
   const response = await instance.get('/allFolderName')
   if(response.data.code === 200){
-    return response.data.data;
+    return response.data;
   } else {
     message.error(response.data.message);
   }
