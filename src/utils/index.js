@@ -35,6 +35,14 @@ async function createNewFolder(newFolderName){
   return response.data;
 }
 
+async function getZipDownloadUrl(folderName){
+  const response = await instance.get(`/zip?folderName=${folderName}`);
+  if(response.data.code !== 200){
+    message.error(response.data.message);
+  }
+  return response.data;
+}
+
 // 自定义 hooks
 const useDebounce = (value, delay) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -48,4 +56,4 @@ const useDebounce = (value, delay) => {
 };
 
 
-export {UPLOAD_URL, instance, getAllFolderNameList, useDebounce, createNewFolder};
+export {UPLOAD_URL, instance, getAllFolderNameList, useDebounce, createNewFolder, getZipDownloadUrl};

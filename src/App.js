@@ -2,7 +2,7 @@ import './App.css';
 import { Upload, Button, message,Modal, Input } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import {useState, useEffect} from 'react'
-import {UPLOAD_URL, getAllFolderNameList, useDebounce, createNewFolder} from './utils/index';
+import {UPLOAD_URL, getAllFolderNameList, useDebounce, createNewFolder, getZipDownloadUrl} from './utils/index';
 
 
 
@@ -12,6 +12,7 @@ function App() {
   const [folderInputValue, handleFolderInputValue] = useState('');
   const [folderNameIsDuplication, setFolderNameIsDuplication] = useState(false);// 通过接口判断文件夹名称是否重复
   const debouncedFolderInputValue = useDebounce(folderInputValue, 500);
+  const [folderName, setFolderName] = useState();
 
   useEffect(()=>{
     initFolderName()
@@ -50,6 +51,8 @@ function App() {
     let folderName = localStorage.getItem('folderName');
     if(!folderName){
       setModalVisible(true);
+    } else {
+      setFolderName(folderName);
     }
   }
   useEffect(()=>{
@@ -67,9 +70,15 @@ function App() {
     createNewFolder(debouncedFolderInputValue).then((response)=>{
       if(response.code === 200){
         setModalVisible(false);
-        localStorage.setItem('folderName', 'true');
+        localStorage.setItem('folderName', response.data);
+        setFolderName(response.data);
       }
     })
+  }
+
+  const handleClickDown = async ()=>{
+    const response = await getZipDownloadUrl(folderName);
+    window.open(response.data);
   }
 
   return (
@@ -78,9 +87,13 @@ function App() {
         onChange={handleFileUpload}
         action={`${UPLOAD_URL}/upload`}
         fileList={fileList}
+        data={{
+          folderName: folderName
+        }}
       >
-        <Button icon={<UploadOutlined />}>上传 HTML 或者图片</Button>
+        <Button icon={<UploadOutlined />} type='primary'>上传 HTML 或者图片</Button>
       </Upload>
+      <Button onClick={handleClickDown}>下载已上传文件</Button>
       <Modal
         title="请输入您的专属文件夹名称"
         visible={modalVisible}
