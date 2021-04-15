@@ -84,13 +84,13 @@ function Home() {
 
   const handleClickPreview = (file)=>{
     const {type, url} = file;
+    console.log(file);
 
     if(ARCHIVE_LIST.includes(type)){
       history.push("/fileSystem");
     } else {
       window.open(url);
     }
-
   }
 
   return (
