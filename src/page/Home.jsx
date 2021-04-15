@@ -1,6 +1,7 @@
 import { Upload, Button, message,Modal, Input } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import {useState, useEffect} from 'react'
+import { useHistory } from "react-router-dom";
 
 import {UPLOAD_URL, getAllFolderNameList, useDebounce, createNewFolder, getZipDownloadUrl, ARCHIVE_LIST} from '../utils/index';
 
@@ -12,6 +13,7 @@ function Home() {
   const [folderNameIsDuplication, setFolderNameIsDuplication] = useState(false);// 通过接口判断文件夹名称是否重复
   const debouncedFolderInputValue = useDebounce(folderInputValue, 500);
   const [folderName, setFolderName] = useState();
+  let history = useHistory();
 
   useEffect(()=>{
     initFolderName()
@@ -84,7 +86,7 @@ function Home() {
     const {type, url} = file;
 
     if(ARCHIVE_LIST.includes(type)){
-      window.open()
+      history.push("/fileSystem");
     } else {
       window.open(url);
     }
