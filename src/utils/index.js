@@ -9,6 +9,7 @@ if(process.env.REACT_APP_ENV === 'dev'){
 } else {
   UPLOAD_URL = 'http://canyou.rickricks.com:7777'
 }
+let ARCHIVE_LIST = ['application/zip'];
 
 
 // 请求方法
@@ -56,4 +57,4 @@ const useDebounce = (value, delay) => {
 };
 
 
-export {UPLOAD_URL, instance, getAllFolderNameList, useDebounce, createNewFolder, getZipDownloadUrl};
+export {UPLOAD_URL, instance, getAllFolderNameList, useDebounce, createNewFolder, getZipDownloadUrl, ARCHIVE_LIST};
