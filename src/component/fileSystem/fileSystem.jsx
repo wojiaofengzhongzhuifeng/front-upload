@@ -36,17 +36,20 @@ function FileSystemComponent(){
     })
   }, [])
 
-  const convertToTreeData = (resData)=>{
-    let needAppendTreeData = resData && resData.map((subContent)=>{
+  const convertToTreeData = (resData, parentKey)=>{
+    return resData && resData.map((subContent)=>{
       let treeDataItem;
       if(subContent.isDir && subContent.hasChildren){
-        treeDataItem = { title: subContent.name, key: subContent.name}
+        treeDataItem = { title: subContent.name, key: `${subContent.name}`}
       } else {
-        treeDataItem = { title: subContent.name, key: subContent.name, isLeaf: true  }
+        if(parentKey){
+          treeDataItem = { title: subContent.name, key: `${parentKey}/${subContent.name}`, isLeaf: true  }
+        } else {
+          treeDataItem = { title: subContent.name, key: `${subContent.name}`, isLeaf: true  }
+        }
       }
       return treeDataItem
     });
-    return needAppendTreeData
   }
   const getFolderSubContentListWrapper = async ()=>{
     if(folderPathList.length === 0){history.push("/");return}
@@ -55,10 +58,12 @@ function FileSystemComponent(){
     return subContentList
   }
   const onLoadData = ({ key, children }) => {
+    let tempKeyArray = key.split('/');
+    key = tempKeyArray[tempKeyArray.length - 1];
     return new Promise(async resolve => {
       if (children) {resolve();return;}
       const subContentListResponse = await getFolderSubContentList([...folderPathList, key]);
-      let needAppendTreeData = convertToTreeData(subContentListResponse.data);
+      let needAppendTreeData = convertToTreeData(subContentListResponse.data, key);
 
       setTreeData(origin =>
         updateTreeData(origin, key, needAppendTreeData),
@@ -67,16 +72,9 @@ function FileSystemComponent(){
     });
   }
   const onSelect = (selectKeys, e)=>{
-    console.log(selectKeys, e);
-    console.log(folderPathList);
     let selectNodeKey = e.node.key;
-
-    console.log('fdsafdas', selectNodeKey);
-
-    console.log('fjdksjfkdsa', treeData);
-
     if(e.node.isLeaf){
-      let previewUrl = `${UPLOAD_URL}/upload/${folderPathList.join('/')}`
+      let previewUrl = `${UPLOAD_URL}/upload/${folderPathList.join('/')}/${selectNodeKey}`
       window.open(previewUrl)
     }
   }
