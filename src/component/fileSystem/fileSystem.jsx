@@ -82,16 +82,14 @@ function FileSystemComponent(){
     console.log(expandKeys);
     setExpandKeyList(expandKeys);
   }
-  const onClickTest = ()=>{
-    console.log('folderPathList', folderPathList);
-    console.log('expandKeyList', expandKeyList);
-    console.log('treeData', treeData);
+  const onClickUploadComponent = ()=>{
+    history.push("/");
   }
 
   return (
     <div style={{display:"flex"}}>
       <Tree loadData={onLoadData} treeData={treeData} onSelect={onSelect} onExpand={onExpand} expandedKeys={expandKeyList}/>
-      <Button onClick={onClickTest}>test 查看当前路径</Button>
+      <Button onClick={onClickUploadComponent}>返回上传页面</Button>
     </div>
   )
 }
