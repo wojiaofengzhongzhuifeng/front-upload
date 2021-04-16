@@ -3,7 +3,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import {useState, useEffect} from 'react'
 import { useHistory } from "react-router-dom";
 
-import {UPLOAD_URL, getAllFolderNameList, useDebounce, createNewFolder, getZipDownloadUrl, ARCHIVE_LIST} from '../utils/index';
+import {UPLOAD_URL, getAllFolderNameList, useDebounce, createNewFolder, getZipDownloadUrl, ARCHIVE_LIST, useFolderPathContext} from '../utils/index';
 
 
 function Home() {
@@ -13,6 +13,7 @@ function Home() {
   const [folderNameIsDuplication, setFolderNameIsDuplication] = useState(false);// 通过接口判断文件夹名称是否重复
   const debouncedFolderInputValue = useDebounce(folderInputValue, 500);
   const [folderName, setFolderName] = useState();
+  const {folderPathList, setFolderPathList} = useFolderPathContext();
   let history = useHistory();
 
   useEffect(()=>{
@@ -50,21 +51,27 @@ function Home() {
   // 用户自定义在后端 upload 目录的名称
   const initFolderName = ()=>{
     let folderName = localStorage.getItem('folderName');
+    console.log(folderName);
     if(!folderName){
       setModalVisible(true);
     } else {
+      setFolderPathList([folderName]);
       setFolderName(folderName);
     }
   }
   useEffect(()=>{
-    getAllFolderNameList().then(response => {
-      const {data: folderNameList} = response;
-      if(folderNameList.includes(debouncedFolderInputValue)){
-        setFolderNameIsDuplication(true);
-      } else {
-        setFolderNameIsDuplication(false);
-      }
-    })
+    if(debouncedFolderInputValue){
+      getAllFolderNameList().then(response => {
+        const {data: folderNameList} = response;
+        if(folderNameList.includes(debouncedFolderInputValue)){
+          setFolderNameIsDuplication(true);
+        } else {
+          console.log(debouncedFolderInputValue);
+          setFolderPathList([debouncedFolderInputValue]);
+          setFolderNameIsDuplication(false);
+        }
+      })
+    }
   }, [debouncedFolderInputValue]);
 
   const handleClickOk = ()=>{
@@ -85,8 +92,10 @@ function Home() {
   const handleClickPreview = (file)=>{
     const {type, url} = file;
     console.log(file);
+    const fileName = file.name.split('.')[0];
 
     if(ARCHIVE_LIST.includes(type)){
+      setFolderPathList([...folderPathList, fileName]);
       history.push("/fileSystem");
     } else {
       window.open(url);

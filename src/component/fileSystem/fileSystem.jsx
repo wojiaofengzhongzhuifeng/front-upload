@@ -1,69 +1,48 @@
-import React, {useEffect} from 'react';
-import { Tree, Table } from 'antd';
+import React, {useEffect, useState} from 'react';
+import { Tree } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
+import {useFolderPathContext, getFolderSubContentList} from '../../utils/index';
+import { useHistory } from "react-router-dom";
 
 
 function FileSystemComponent(){
+  const {folderPathList, setFolderPathList} = useFolderPathContext();
+  let history = useHistory();
+  const [treeData, setTreeData] = useState([
+    {
+      title: "parent 1",
+      key: "0-0",
+      children: [
+
+      ]
+    }
+  ]);
 
   useEffect(()=>{
+    async function getFolderSubContentListWrapper(){
+      if(folderPathList.length === 0){
+        history.push("/");
+        return
+      }
+      const subContentListResponse = await getFolderSubContentList(folderPathList);
+      const {data: subContentList} = subContentListResponse;
 
-  }, [])
+      return subContentList
+    }
+    getFolderSubContentListWrapper().then((subContentList)=>{
+      console.log(subContentList)
+    })
+
+  }, [folderPathList])
 
   const onSelect = (selectedKeys, info) => {
     console.log('selected', selectedKeys, info);
   };
-  const treeData = [
-    {
-      title: 'parent 1',
-      key: '0-0',
-      children: [
-        {
-          title: 'parent 1-0',
-          key: '0-0-0',
-          children: [
-            {
-              title: 'leaf',
-              key: '0-0-0-0',
-            },
-            {
-              title: 'leaf',
-              key: '0-0-0-1',
-            },
-            {
-              title: 'leaf',
-              key: '0-0-0-2',
-            },
-          ],
-        },
-        {
-          title: 'parent 1-1',
-          key: '0-0-1',
-          children: [
-            {
-              title: 'leaf',
-              key: '0-0-1-0',
-            },
-          ],
-        },
-        {
-          title: 'parent 1-2',
-          key: '0-0-2',
-          children: [
-            {
-              title: 'leaf',
-              key: '0-0-2-0',
-            },
-            {
-              title: 'leaf',
-              key: '0-0-2-1',
-            },
-          ],
-        },
-      ],
-    },
-  ]
-  const onExpand = (e, a) => {
-    console.log('Trigger Expand', e, a);
+  const onExpand = (expandList, expandItem) => {
+    if(expandItem.expanded){
+      let folderPathName = expandItem.node.key;
+      setFolderPathList([...folderPathList, folderPathName])
+    }
   };
 
   return (
