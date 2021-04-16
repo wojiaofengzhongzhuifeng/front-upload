@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import { Tree } from 'antd';
-import {useFolderPathContext, getFolderSubContentList} from '../../utils/index';
+import { Tree, Button } from 'antd';
+import {useFolderPathContext, getFolderSubContentList, UPLOAD_URL} from '../../utils/index';
 import { useHistory } from "react-router-dom";
 
 
@@ -24,9 +24,10 @@ function updateTreeData(list, key, children) {
 }
 
 function FileSystemComponent(){
-  const {folderPathList, setFolderPathList} = useFolderPathContext();
+  const {folderPathList} = useFolderPathContext();
   let history = useHistory();
   const [treeData, setTreeData] = useState([]);
+  const [expandKeyList, setExpandKeyList] = useState([]);
 
   useEffect(()=>{
     getFolderSubContentListWrapper().then((subContentList)=>{
@@ -54,25 +55,45 @@ function FileSystemComponent(){
     return subContentList
   }
   const onLoadData = ({ key, children }) => {
-    setFolderPathList([...folderPathList, key]);
-    return new Promise(resolve => {
+    return new Promise(async resolve => {
       if (children) {resolve();return;}
-      setFolderPathList(async current => {
-        const subContentListResponse = await getFolderSubContentList(current);
-        let needAppendTreeData = convertToTreeData(subContentListResponse.data);
+      const subContentListResponse = await getFolderSubContentList([...folderPathList, key]);
+      let needAppendTreeData = convertToTreeData(subContentListResponse.data);
 
-        setTreeData(origin =>
-          updateTreeData(origin, key, needAppendTreeData),
-        );
-        resolve();
-        return current
-      })
+      setTreeData(origin =>
+        updateTreeData(origin, key, needAppendTreeData),
+      );
+      resolve();
     });
+  }
+  const onSelect = (selectKeys, e)=>{
+    console.log(selectKeys, e);
+    console.log(folderPathList);
+    let selectNodeKey = e.node.key;
+
+    console.log('fdsafdas', selectNodeKey);
+
+    console.log('fjdksjfkdsa', treeData);
+
+    if(e.node.isLeaf){
+      let previewUrl = `${UPLOAD_URL}/upload/${folderPathList.join('/')}`
+      window.open(previewUrl)
+    }
+  }
+  const onExpand = (expandKeys)=>{
+    console.log(expandKeys);
+    setExpandKeyList(expandKeys);
+  }
+  const onClickTest = ()=>{
+    console.log('folderPathList', folderPathList);
+    console.log('expandKeyList', expandKeyList);
+    console.log('treeData', treeData);
   }
 
   return (
     <div style={{display:"flex"}}>
-      <Tree loadData={onLoadData} treeData={treeData}/>
+      <Tree loadData={onLoadData} treeData={treeData} onSelect={onSelect} onExpand={onExpand} expandedKeys={expandKeyList}/>
+      <Button onClick={onClickTest}>test 查看当前路径</Button>
     </div>
   )
 }

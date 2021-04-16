@@ -25,7 +25,6 @@ const FolderPathProvider = ({ children }) => {
 };
 export const useFolderPathContext = () => {
   const context = React.useContext(FolderPathContext);
-  console.log(context);
   if (!context) {
     throw new Error("useAuth 必须在 AuthProvider 中使用");
   }
