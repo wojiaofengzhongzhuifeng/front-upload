@@ -40,7 +40,11 @@ function FileSystemComponent(){
     return resData && resData.map((subContent)=>{
       let treeDataItem;
       if(subContent.isDir && subContent.hasChildren){
-        treeDataItem = { title: subContent.name, key: `${subContent.name}`}
+        if(parentKey){
+          treeDataItem = { title: subContent.name, key: `${parentKey}/${subContent.name}` }
+        } else {
+          treeDataItem = { title: subContent.name, key: `${subContent.name}` }
+        }
       } else {
         if(parentKey){
           treeDataItem = { title: subContent.name, key: `${parentKey}/${subContent.name}`, isLeaf: true  }
@@ -58,8 +62,6 @@ function FileSystemComponent(){
     return subContentList
   }
   const onLoadData = ({ key, children }) => {
-    let tempKeyArray = key.split('/');
-    key = tempKeyArray[tempKeyArray.length - 1];
     return new Promise(async resolve => {
       if (children) {resolve();return;}
       const subContentListResponse = await getFolderSubContentList([...folderPathList, key]);
@@ -85,11 +87,15 @@ function FileSystemComponent(){
   const onClickUploadComponent = ()=>{
     history.push("/");
   }
+  const handleTEST = ()=>{
+    console.log(treeData);
+  }
 
   return (
     <div style={{display:"flex"}}>
       <Tree loadData={onLoadData} treeData={treeData} onSelect={onSelect} onExpand={onExpand} expandedKeys={expandKeyList}/>
       <Button onClick={onClickUploadComponent}>返回上传页面</Button>
+      <Button onClick={handleTEST}>测试</Button>
     </div>
   )
 }
