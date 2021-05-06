@@ -115,7 +115,7 @@ function Home() {
       >
         <Button icon={<UploadOutlined />} type='primary'>上传 HTML 或者图片</Button>
       </Upload>
-      <Button onClick={handleClickDown}>下载已上传文件</Button>
+      {window.IS_DEV ? <Button onClick={handleClickDown}>下载已上传文件</Button> : null}
       <Modal
         title="请输入您的专属文件夹名称"
         visible={modalVisible}

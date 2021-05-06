@@ -5,6 +5,10 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {AppProviders} from './utils/index';
 
+
+
+window.IS_DEV = process.env.REACT_APP_ENV === 'dev';
+
 ReactDOM.render(
   <AppProviders>
     <App />

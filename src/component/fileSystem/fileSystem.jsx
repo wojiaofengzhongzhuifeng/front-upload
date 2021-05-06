@@ -95,8 +95,8 @@ function FileSystemComponent(){
     <div style={{display:"flex"}}>
       <Tree loadData={onLoadData} treeData={treeData} onSelect={onSelect} onExpand={onExpand} expandedKeys={expandKeyList}/>
       <Button onClick={onClickUploadComponent}>返回上传页面</Button>
-      <Button onClick={handleTEST}>测试</Button>
+      {window.IS_DEV ? <Button onClick={handleTEST}>测试</Button>: null}
     </div>
   )
-}
+};
 export default FileSystemComponent
