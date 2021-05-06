@@ -5,7 +5,7 @@ import {message} from 'antd';
 // 变量
 let UPLOAD_URL;
 if(process.env.REACT_APP_ENV === 'dev'){
-  UPLOAD_URL = 'http://localhost:3003'
+  UPLOAD_URL = 'http://localhost:7778'
 } else {
   UPLOAD_URL = 'http://canyou.rickricks.com:7777'
 }
