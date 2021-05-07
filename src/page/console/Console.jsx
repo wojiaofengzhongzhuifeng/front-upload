@@ -5,6 +5,7 @@ import {
   Route,
 } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import './style.css';
 
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -33,11 +34,14 @@ const Console = ({pathName})=>{
   const onSelect = (item)=>{
     setSelectedKeys([...item.selectedKeys])
   }
+  const onClickHome = ()=>{
+    history.push('/');
 
+  }
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible >
-        <div className={'logo'} />
+        <div className={'logo'} onClick={onClickHome}>返回主页面</div>
         <Menu theme="dark" mode="inline" onSelect={onSelect} selectedKeys={selectedKeys}>
           <Menu.Item key="allPerson" >
             全部人员存储情况
