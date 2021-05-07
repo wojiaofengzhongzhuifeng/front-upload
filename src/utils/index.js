@@ -35,7 +35,7 @@ export const useFolderPathContext = () => {
 // 请求方法
 const instance = axios.create({
   baseURL: UPLOAD_URL,
-  timeout: 1000,
+  timeout: 10000,
 });
 async function getAllFolderNameList(){
   const response = await instance.get('/allFolderName')
