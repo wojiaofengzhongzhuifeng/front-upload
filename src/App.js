@@ -20,7 +20,7 @@ function App() {
               <FileSystem />
             </Route>
             <Route path="/console">
-              <Console />
+              <Console pathName='/console'/>
             </Route>
             <Route path="/">
               <Home />
