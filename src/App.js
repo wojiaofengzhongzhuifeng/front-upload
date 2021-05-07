@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Home from './page/Home';
 import FileSystem from './page/FileSystem';
+import Console from "./page/console/Console";
 
 
 function App() {
@@ -17,6 +18,9 @@ function App() {
           <Switch>
             <Route path="/fileSystem">
               <FileSystem />
+            </Route>
+            <Route path="/console">
+              <Console />
             </Route>
             <Route path="/">
               <Home />

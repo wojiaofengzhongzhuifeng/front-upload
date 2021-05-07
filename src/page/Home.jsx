@@ -101,6 +101,9 @@ function Home() {
       window.open(url);
     }
   }
+  const onClickConsole = ()=>{
+    history.push("/console");
+  }
 
   return (
     <div>
@@ -116,6 +119,7 @@ function Home() {
         <Button icon={<UploadOutlined />} type='primary'>上传 HTML 或者图片</Button>
       </Upload>
       {window.IS_DEV ? <Button onClick={handleClickDown}>下载已上传文件</Button> : null}
+      <Button onClick={onClickConsole}>进入管理界面</Button>
       <Modal
         title="请输入您的专属文件夹名称"
         visible={modalVisible}
