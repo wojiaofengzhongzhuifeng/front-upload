@@ -6,20 +6,14 @@ import {
 } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import './style.css';
+import AllPerson from '../../component/AllPerson/AllPerson';
+import Person from '../../component/Person/Person';
+
 
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const AllPerson = ()=>{
-  return (
-    <div>AllPerson</div>
-  )
-}
-const Person = ()=>{
-  return (
-    <div>Person</div>
-  )
-}
+
 
 
 const Console = ({pathName})=>{
