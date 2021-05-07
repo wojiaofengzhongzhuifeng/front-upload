@@ -6,8 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import {AppProviders} from './utils/index';
 
 
-
-window.IS_DEV = process.env.REACT_APP_ENV === 'dev';
+window.IS_DEV = process.env.NODE_ENV === 'development';
 
 ReactDOM.render(
   <AppProviders>

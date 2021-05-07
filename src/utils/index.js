@@ -4,10 +4,10 @@ import {message} from 'antd';
 
 // 变量
 let UPLOAD_URL;
-if(process.env.REACT_APP_ENV === 'dev'){
+if(process.env.NODE_ENV === 'development'){
   UPLOAD_URL = 'http://localhost:7778'
 } else {
-  UPLOAD_URL = 'http://canyou.rickricks.com:7777'
+  UPLOAD_URL = 'http://upload-api.fsskay.xyz:7778'
 }
 let ARCHIVE_LIST = ['application/zip'];
 
