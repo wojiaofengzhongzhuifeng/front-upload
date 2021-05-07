@@ -106,7 +106,7 @@ function Home() {
   }
 
   return (
-    <div>
+    <div style={{display: 'flex', justifyContent: "center", alignItems: 'center'}}>
       <Upload
         onChange={handleFileUpload}
         action={`${UPLOAD_URL}/upload`}
