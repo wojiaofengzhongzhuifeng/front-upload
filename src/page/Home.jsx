@@ -3,7 +3,16 @@ import { UploadOutlined } from '@ant-design/icons';
 import {useState, useEffect} from 'react'
 import { useHistory } from "react-router-dom";
 
-import {UPLOAD_URL, getAllFolderNameList, useDebounce, createNewFolder, getZipDownloadUrl, ARCHIVE_LIST, useFolderPathContext} from '../utils/index';
+import {
+  UPLOAD_URL,
+  getAllFolderNameList,
+  useDebounce,
+  createNewFolder,
+  getZipDownloadUrl,
+  ARCHIVE_LIST,
+  useFolderPathContext,
+  isCompressedPackage,
+} from '../utils/index';
 
 
 function Home() {
@@ -22,6 +31,7 @@ function Home() {
   }, [])
 
   const handleFileUpload = (info)=>{
+    if(!info.file.status){return}
     if (info.file.status !== 'uploading') {
       const uploadFileObj = info.file;
       // eslint-disable-next-line array-callback-return
@@ -101,6 +111,28 @@ function Home() {
       window.open(url);
     }
   }
+
+  // 上传之前做下检查
+  // 检查点:
+  // 1. 如果上传的是压缩包,那么只能是 zip
+  const beforeUpload = (file, fileList)=>{
+    let fileName = file.name;
+    // 获取文件的格式
+    let suffix = fileName.split('.')[1];
+    let fileType = file.type;
+
+    if(isCompressedPackage(fileType)){
+      if(suffix !== 'zip'){
+        message.error('目前只支持上传 zip 压缩包');
+        return false
+      } else {
+        return true
+      }
+    } else {
+      return true
+    }
+  }
+
   const onClickConsole = ()=>{
     history.push("/console");
   }
@@ -115,6 +147,7 @@ function Home() {
           folderName: folderName
         }}
         onPreview={handleClickPreview}
+        beforeUpload={beforeUpload}
       >
         <Button icon={<UploadOutlined />} type='primary'>上传 HTML 或者图片</Button>
       </Upload>

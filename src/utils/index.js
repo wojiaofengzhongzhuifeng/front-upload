@@ -87,4 +87,19 @@ const useDebounce = (value, delay) => {
 };
 
 
-export {UPLOAD_URL, instance, getAllFolderNameList, useDebounce, createNewFolder, getZipDownloadUrl, ARCHIVE_LIST, getFolderSubContentList};
+// 判断用户上传是否为压缩包
+function isCompressedPackage(fileType){
+  let compressedPackageSuffix = ['zip', 'rar'];
+  let isCompressedPackageFlag = false;
+  for(let i=0;i<=compressedPackageSuffix.length - 1;i++){
+    let compressedPackageSuffixItem = compressedPackageSuffix[i];
+    if(fileType.includes(compressedPackageSuffixItem)){
+      isCompressedPackageFlag = true;
+      break;
+    }
+  }
+  return isCompressedPackageFlag
+}
+
+
+export {UPLOAD_URL, instance, getAllFolderNameList, useDebounce, createNewFolder, getZipDownloadUrl, ARCHIVE_LIST, getFolderSubContentList, isCompressedPackage};
