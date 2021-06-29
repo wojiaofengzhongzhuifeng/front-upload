@@ -5,11 +5,12 @@ import {message} from 'antd';
 // 变量
 let UPLOAD_URL;
 if(process.env.NODE_ENV === 'development'){
-  UPLOAD_URL = 'http://localhost:7778'
+  UPLOAD_URL = 'http://192.168.1.45:7778'
 } else {
   UPLOAD_URL = 'http://upload-api.fsskay.xyz:7778'
 }
-let ARCHIVE_LIST = ['application/zip'];
+// 压缩格式有多种 type
+let ARCHIVE_LIST = ['application/zip','application/x-zip-compressed'];
 
 // context
 export const AppProviders = ({ children }) => {
