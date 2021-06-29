@@ -54,3 +54,30 @@
 
 - 限制压缩包上传格式,目前只支持 zip 的压缩格式
     
+- 允许用户上传同名称的压缩包,这两个压缩包的内容不会互相影响, 并且支持以下两种压缩结构
+
+```
+test-html.zip
+└── test-html
+    ├── index.html
+    ├── test-html-1
+    │   ├── image-20200725151755080.png
+    │   ├── test-html--1-1
+    │   │   ├── image-20200727163203887.png
+    │   │   └── test.js
+    │   └── test.json
+    └── test.json
+```
+
+```
+test-html.zip
+├── index.html
+├── test-html-1
+│   ├── image-20200725151755080.png
+│   ├── test-html--1-1
+│   │   ├── image-20200727163203887.png
+│   │   └── test.js
+│   └── test.json
+└── test.json
+
+```

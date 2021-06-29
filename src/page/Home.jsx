@@ -102,7 +102,7 @@ function Home() {
   const handleClickPreview = (file)=>{
     const {type, url} = file;
     console.log(file);
-    const fileName = file.name.split('.')[0];
+    const fileName = url.split(`/${folderPathList[0]}/`)[1].split('.')[0];
 
     if(ARCHIVE_LIST.includes(type)){
       setFolderPathList([...folderPathList, fileName]);
