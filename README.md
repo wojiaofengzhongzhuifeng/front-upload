@@ -81,3 +81,7 @@ test-html.zip
 └── test.json
 
 ```
+
+- 文件夹分享功能
+  
+- 文件夹下载功能

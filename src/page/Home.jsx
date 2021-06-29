@@ -1,4 +1,4 @@
-import { Upload, Button, message,Modal, Input } from 'antd';
+import { Upload, Button, message,Modal, Input, Table, Tag, Space } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import {useState, useEffect} from 'react'
 import { useHistory } from "react-router-dom";
@@ -137,6 +137,21 @@ function Home() {
     history.push("/console");
   }
 
+  // 点击分享按钮
+  const handleClickShare = (file)=>{
+    console.log(file);
+  }
+
+  // 自定义上传列表项
+  const itemRender = (originNode, file, fileList, actions)=>{
+    return (
+      <div>
+        <span onClick={()=>{handleClickPreview(file)}} style={{cursor: 'pointer'}}>{file.name}</span>
+        <span onClick={()=>{handleClickShare(file)}} style={{cursor: 'pointer'}}>分享</span>
+      </div>
+    )
+  }
+
   return (
     <div style={{display: 'flex', justifyContent: "center", alignItems: 'center'}}>
       <Upload
@@ -148,6 +163,7 @@ function Home() {
         }}
         onPreview={handleClickPreview}
         beforeUpload={beforeUpload}
+        itemRender={itemRender}
       >
         <Button icon={<UploadOutlined />} type='primary'>上传 HTML 或者图片</Button>
       </Upload>
