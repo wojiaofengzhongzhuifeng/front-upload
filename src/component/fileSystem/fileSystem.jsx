@@ -24,17 +24,18 @@ function updateTreeData(list, key, children) {
 }
 
 function FileSystemComponent(){
-  const {folderPathList} = useFolderPathContext();
+  const {folderPathList, setFolderPathList} = useFolderPathContext();
   let history = useHistory();
   const [treeData, setTreeData] = useState([]);
   const [expandKeyList, setExpandKeyList] = useState([]);
 
   useEffect(()=>{
+    console.log('folderPathList', folderPathList);
     getFolderSubContentListWrapper().then((subContentList)=>{
       let needAppendTreeData = convertToTreeData(subContentList);
       setTreeData(needAppendTreeData)
     })
-  }, [])
+  }, [folderPathList])
 
   const convertToTreeData = (resData, parentKey)=>{
     return resData && resData.map((subContent)=>{
@@ -99,4 +100,27 @@ function FileSystemComponent(){
     </div>
   )
 };
+
+
+
+export function ShareFileSystemComponent(props){
+  console.log('ShareFileSystemComponent');
+  const {folderPathList, setFolderPathList} = useFolderPathContext();
+
+  // 获取 share 路由的 params ,将其放入到 useFolderPathContext 中
+  const fetchUrlQueryParams = ()=>{
+    setFolderPathList(['1', '5fc228d3-b1b6-4471-bb37-340bec15e6fd_test-html']);
+  }
+
+  useEffect(()=>{
+    fetchUrlQueryParams();
+  }, [fetchUrlQueryParams]);
+
+  return (
+    <div>
+      FileSystemComponent111
+      <FileSystemComponent/>
+    </div>
+  )
+}
 export default FileSystemComponent
